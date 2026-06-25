@@ -1,0 +1,25 @@
+{
+  "todos": [
+    {
+      "id": "1",
+      "title": "hello",
+      "done": true
+    },
+    {
+      "id": "2",
+      "title": "hello",
+      "done": true
+    },
+    {
+      "title": "리액트 공부하기",
+      "done": true,
+      "id": "Zwh7FUiJAwI"
+    },
+    {
+      "title": "aaaa",
+      "done": false,
+      "id": "Lk-yXbr6Ei4"
+    }
+  ],
+  "$schema": "./node_modules/json-server/schema.json"
+}
