@@ -1,11 +1,6 @@
 {
   "todos": [
     {
-      "id": "1",
-      "title": "hello",
-      "done": true
-    },
-    {
       "id": "2",
       "title": "hello",
       "done": true
@@ -19,6 +14,11 @@
       "title": "aaaa",
       "done": false,
       "id": "Lk-yXbr6Ei4"
+    },
+    {
+      "title": "asdasd",
+      "done": false,
+      "id": "TRXW7aY4h5E"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"
