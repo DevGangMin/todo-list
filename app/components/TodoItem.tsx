@@ -1,25 +1,34 @@
 "use client";
 
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { deleteTodo, toggleTodo } from "../api/todos";
+import { useState } from "react";
+import { useDeleteTodoMutation, useToggleTodoMutation, useUpdateTodoMutation } from "@/app/hooks/mutation";
 import { Todo } from "../types/index";
 
 export default function TodoItem({ todo }: { todo: Todo }) {
-  const queryClient = useQueryClient();
+  const [isEditing, setIsEditing] = useState(false);
+  const [editTitle, setEditTitle] = useState(todo.title);
 
-  const invalidate = () => {
-    queryClient.invalidateQueries({ queryKey: ["todos"] });
+  const { mutate: remove } = useDeleteTodoMutation();
+  const { mutate: toggle } = useToggleTodoMutation();
+  const { mutate: update } = useUpdateTodoMutation();
+
+  const enterEditMode = () => {
+    setEditTitle(todo.title);
+    setIsEditing(true);
   };
 
-  const { mutate: remove } = useMutation({
-    mutationFn: deleteTodo,
-    onSuccess: invalidate,
-  });
+  const handleSave = () => {
+    const trimmed = editTitle.trim();
+    if (trimmed && trimmed !== todo.title) {
+      update({ id: todo.id, title: trimmed });
+    }
+    setIsEditing(false);
+  };
 
-  const { mutate: toggle } = useMutation({
-    mutationFn: toggleTodo,
-    onSuccess: invalidate,
-  });
+  const handleCancel = () => {
+    setEditTitle(todo.title);
+    setIsEditing(false);
+  };
 
   return (
     <li>
@@ -28,9 +37,26 @@ export default function TodoItem({ todo }: { todo: Todo }) {
         checked={todo.done}
         onChange={() => toggle(todo)}
       />
-      <span style={{ textDecoration: todo.done ? "line-through" : "none" }}>
-        {todo.title}
-      </span>
+      {isEditing ? (
+        <input
+          autoFocus
+          type="text"
+          value={editTitle}
+          onChange={(e) => setEditTitle(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") handleSave();
+            if (e.key === "Escape") handleCancel();
+          }}
+          onBlur={handleSave}
+        />
+      ) : (
+        <span
+          style={{ textDecoration: todo.done ? "line-through" : "none" }}
+          onDoubleClick={enterEditMode}
+        >
+          {todo.title}
+        </span>
+      )}
       <button onClick={() => remove(todo.id)}>삭제</button>
     </li>
   );

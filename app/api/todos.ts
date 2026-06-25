@@ -27,6 +27,16 @@ export const deleteTodo = async (id: number): Promise<void> => {
   if (!res.ok) throw new Error("Todo List delete failed");
 };
 
+export const updateTodo = async ({ id, title }: { id: number; title: string }): Promise<Todo> => {
+  const res = await fetch(`${BASE_URL}/${id}`, {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ title }),
+  });
+  if (!res.ok) throw new Error("Todo update failed");
+  return res.json();
+};
+
 export const toggleTodo = async (todo: Todo): Promise<Todo> => {
   const res = await fetch(`${BASE_URL}/${todo.id}`, {
     method: "PATCH",
